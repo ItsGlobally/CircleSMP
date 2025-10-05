@@ -2,6 +2,7 @@ package top.itsglobally.circlenetwork.circleSMP;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import top.itsglobally.circlenetwork.circleSMP.utils.ManagerRegistry;
+import top.nontage.nontagelib.command.NontageCommandLoader;
 
 public final class CircleSMP extends JavaPlugin {
 
@@ -11,12 +12,11 @@ public final class CircleSMP extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         ManagerRegistry.init();
-
+        NontageCommandLoader.registerAll(this);
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
     }
 
     public static CircleSMP getPlugin() {

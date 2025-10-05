@@ -8,10 +8,12 @@ import top.itsglobally.circlenetwork.circleSMP.data.TpaType;
 import top.itsglobally.circlenetwork.circleSMP.managers.PlayerManager;
 import top.itsglobally.circlenetwork.circleSMP.utils.ManagerRegistry;
 import top.itsglobally.circlenetwork.circleSMP.utils.MessageUtil;
+import top.nontage.nontagelib.annotations.CommandInfo;
 import top.nontage.nontagelib.command.NontageCommand;
 
 import java.util.List;
 
+@CommandInfo(name="tpdeny")
 public class tpdeny implements NontageCommand, ICommand {
     @Override
     public void execute(CommandSender commandSender, String s, String[] strings) {

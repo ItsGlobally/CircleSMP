@@ -9,11 +9,13 @@ import top.itsglobally.circlenetwork.circleSMP.data.TpaType;
 import top.itsglobally.circlenetwork.circleSMP.managers.PlayerManager;
 import top.itsglobally.circlenetwork.circleSMP.utils.ManagerRegistry;
 import top.itsglobally.circlenetwork.circleSMP.utils.MessageUtil;
+import top.nontage.nontagelib.annotations.CommandInfo;
 import top.nontage.nontagelib.command.NontageCommand;
 
 import java.util.List;
 import java.util.Set;
 
+@CommandInfo(name="tpaccept")
 public class tpaccept implements NontageCommand, ICommand {
     @Override
     public void execute(CommandSender commandSender, String s, String[] strings) {

@@ -16,10 +16,12 @@ import top.itsglobally.circlenetwork.circleSMP.managers.DataManager;
 import top.itsglobally.circlenetwork.circleSMP.managers.PlayerManager;
 import top.itsglobally.circlenetwork.circleSMP.utils.ManagerRegistry;
 import top.itsglobally.circlenetwork.circleSMP.utils.MessageUtil;
+import top.nontage.nontagelib.annotations.CommandInfo;
 import top.nontage.nontagelib.command.NontageCommand;
 
 import java.util.List;
 
+@CommandInfo(name="tpa")
 public class tpa implements NontageCommand, ICommand {
 
     @Override
@@ -60,8 +62,8 @@ public class tpa implements NontageCommand, ICommand {
 
         m.addTpaRequest(p, tr);
 
-        MessageUtil.sendMessage(p, "&9You've sent a tpa request to " + tg.getName());
-        MessageUtil.sendMessage(tg, "&9" + p.getName() + " has sent you a tpa request!");
+        MessageUtil.sendMessage(p, "&9You've sent a tpa request to " + tg.getName() + "! They have " + ManagerRegistry.get(DataManager.class).getMainConfig.getTpaTimeoutSecond() + " seconds to accept!");
+        MessageUtil.sendMessage(tg, "&9" + p.getName() + " has sent you a tpa request! You have " + ManagerRegistry.get(DataManager.class).getMainConfig.getTpaTimeoutSecond() + " seconds to accept!");
         Component c1 = Component.text("Click to accept!\n")
                 .color(NamedTextColor.BLUE)
                 .hoverEvent(HoverEvent.showText(Component.text("Click to accept!").color(NamedTextColor.BLUE)))

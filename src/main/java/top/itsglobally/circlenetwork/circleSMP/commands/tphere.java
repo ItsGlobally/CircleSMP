@@ -7,6 +7,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import top.itsglobally.circlenetwork.circleSMP.data.TpaRequest;
@@ -15,10 +16,11 @@ import top.itsglobally.circlenetwork.circleSMP.managers.DataManager;
 import top.itsglobally.circlenetwork.circleSMP.managers.PlayerManager;
 import top.itsglobally.circlenetwork.circleSMP.utils.ManagerRegistry;
 import top.itsglobally.circlenetwork.circleSMP.utils.MessageUtil;
+import top.nontage.nontagelib.annotations.CommandInfo;
 import top.nontage.nontagelib.command.NontageCommand;
 
 import java.util.List;
-
+@CommandInfo(name="tphere")
 public class tphere implements NontageCommand, ICommand {
 
     @Override
@@ -55,12 +57,12 @@ public class tphere implements NontageCommand, ICommand {
                 m.removeTpaRequest(p, m.getTpaRequest(p, tg));
             }
         }.runTaskLater(plugin, 20L * ManagerRegistry.get(DataManager.class).getMainConfig.getTpaTimeoutSecond());
-        TpaRequest tr = new TpaRequest(p, tg, bt, TpaType.TPA);
+        TpaRequest tr = new TpaRequest(p, tg, bt, TpaType.TPHERE);
 
         m.addTpaRequest(p, tr);
 
-        MessageUtil.sendMessage(p, "&9You've sent a tphere request to " + tg.getName());
-        MessageUtil.sendMessage(tg, "&9" + p.getName() + " has sent you a tphere request!");
+        MessageUtil.sendMessage(p, "&9You've sent a tphere request to " + tg.getName() + "! They have" + ManagerRegistry.get(DataManager.class).getMainConfig.getTpaTimeoutSecond() + " seconds to accept!");
+        MessageUtil.sendMessage(tg, "&9" + p.getName() + " has sent you a tphere request! You have" + ManagerRegistry.get(DataManager.class).getMainConfig.getTpaTimeoutSecond() + " seconds to accept!");
         Component c1 = Component.text("Click to accept!\n")
                 .color(NamedTextColor.BLUE)
                 .hoverEvent(HoverEvent.showText(Component.text("Click to accept!").color(NamedTextColor.BLUE)))

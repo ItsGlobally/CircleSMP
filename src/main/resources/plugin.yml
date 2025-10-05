@@ -1,0 +1,7 @@
+name: CircleSMP
+version: '1.0-SNAPSHOT'
+main: top.itsglobally.circlenetwork.circleSMP.CircleSMP
+api-version: '1.21'
+prefix: Circle SMP
+load: STARTUP
+authors: [ ItsGlobally ]

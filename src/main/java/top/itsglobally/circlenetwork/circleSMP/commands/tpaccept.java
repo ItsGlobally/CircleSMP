@@ -32,18 +32,19 @@ public class tpaccept implements NontageCommand, ICommand {
         }
         PlayerManager m = ManagerRegistry.get(PlayerManager.class);
         TpaRequest tr = m.getTpaRequest(tg, p);
+
         if (tr == null) {
             MessageUtil.sendMessage(p, "&7That player did not send a tpa request to you!");
             return;
         }
         if (tr.getType() == TpaType.TPA) {
-            m.removeTpaRequest(p, tr);
-            tg.teleport(p.getLocation());
+            m.removeTpaRequest(tg, tr);
+           tg.teleport(p.getLocation());
             MessageUtil.sendMessage(p, "&9" + tg.getName() + " has teleported to you!");
             MessageUtil.sendMessage(tg, "&9You have teleported to " + p.getName() + "!");
             return;
         }
-        m.removeTpaRequest(p, tr);
+        m.removeTpaRequest(tg, tr);
         p.teleport(tg.getLocation());
         MessageUtil.sendMessage(tg, "&9" + p.getName() + " has teleported to you!");
         MessageUtil.sendMessage(p, "&9You have teleported to " + tg.getName() + "!");

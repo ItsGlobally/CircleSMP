@@ -12,27 +12,33 @@ public class PlayerManager extends Manager {
 
     public PlayerManager() {
         tpaRequests = new HashMap<>();
+
     }
 
     public Set<TpaRequest> getTpaRequests(Player p) {
         return tpaRequests.get(p.getUniqueId());
     }
     public TpaRequest getTpaRequest(Player p, Player target) {
-        return tpaRequests.get(p.getUniqueId()).stream()
+        return tpaRequests.getOrDefault(p.getUniqueId(), Collections.emptySet()).stream()
                 .filter(req -> req.getSender().equals(p) && req.getTarget().equals(target))
                 .findFirst()
                 .orElse(null);
+
     }
     public void addTpaRequest(Player p, TpaRequest t) {
-        Set<TpaRequest> s = getTpaRequests(p);
+        Set<TpaRequest> s = tpaRequests.computeIfAbsent(p.getUniqueId(), k -> new HashSet<>());
         s.add(t);
-        tpaRequests.put(p.getUniqueId(), s);
     }
-    public void removeTpaRequest(Player p, TpaRequest t) {
-        Set<TpaRequest> s = getTpaRequests(p);
-        t.getTask().cancel();
-        s.remove(t);
-        tpaRequests.put(p.getUniqueId(), s);
+
+    public void removeTpaRequest(Player sender, TpaRequest t) {
+        Set<TpaRequest> s = tpaRequests.get(sender.getUniqueId());
+        if (s != null) {
+            t.getTask().cancel();
+            s.remove(t);
+            if (s.isEmpty()) tpaRequests.remove(sender.getUniqueId());
+        }
     }
+
+
 
 }

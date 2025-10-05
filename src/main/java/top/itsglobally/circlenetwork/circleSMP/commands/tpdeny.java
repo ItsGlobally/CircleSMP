@@ -34,7 +34,7 @@ public class tpdeny implements NontageCommand, ICommand {
             MessageUtil.sendMessage(p, "&7That player did not send a tpa request to you!");
             return;
         }
-        m.removeTpaRequest(p, tr);
+        m.removeTpaRequest(tg, tr);
         MessageUtil.sendMessage(tg, "&7" + p.getName() + " has denied your request!");
         MessageUtil.sendMessage(p, "&9You have denied " + tg.getName() + "'s request!");
 

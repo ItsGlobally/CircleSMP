@@ -57,21 +57,21 @@ public class tpa implements NontageCommand, ICommand {
                 MessageUtil.sendMessage(tg, "&7Tpa request from " + p.getName() + " has expired.");
                 m.removeTpaRequest(p, m.getTpaRequest(p, tg));
             }
-        }.runTaskLater(plugin, 20L * ManagerRegistry.get(DataManager.class).getMainConfig.getTpaTimeoutSecond());
+        }.runTaskLater(plugin, 20L * ManagerRegistry.get(DataManager.class).getMainConfig().getTpaTimeoutSecond());
         TpaRequest tr = new TpaRequest(p, tg, bt, TpaType.TPA);
 
         m.addTpaRequest(p, tr);
 
-        MessageUtil.sendMessage(p, "&9You've sent a tpa request to " + tg.getName() + "! They have " + ManagerRegistry.get(DataManager.class).getMainConfig.getTpaTimeoutSecond() + " seconds to accept!");
-        MessageUtil.sendMessage(tg, "&9" + p.getName() + " has sent you a tpa request! You have " + ManagerRegistry.get(DataManager.class).getMainConfig.getTpaTimeoutSecond() + " seconds to accept!");
+        MessageUtil.sendMessage(p, "&9You've sent a tpa request to " + tg.getName() + "! They have " + ManagerRegistry.get(DataManager.class).getMainConfig().getTpaTimeoutSecond() + " seconds to accept!");
+        MessageUtil.sendMessage(tg, "&9" + p.getName() + " has sent you a tpa request! You have " + ManagerRegistry.get(DataManager.class).getMainConfig().getTpaTimeoutSecond() + " seconds to accept!");
         Component c1 = Component.text("Click to accept!\n")
                 .color(NamedTextColor.BLUE)
                 .hoverEvent(HoverEvent.showText(Component.text("Click to accept!").color(NamedTextColor.BLUE)))
-                .clickEvent(ClickEvent.runCommand("/tpaccept " + tg.getName()));
+                .clickEvent(ClickEvent.runCommand("/tpaccept " + p.getName()));
         Component c2 = Component.text("Click to deny!")
                 .color(NamedTextColor.BLUE)
                 .hoverEvent(HoverEvent.showText(Component.text("Click to deny!").color(NamedTextColor.GRAY)))
-                .clickEvent(ClickEvent.runCommand("/tpdeny " + tg.getName()));
+                .clickEvent(ClickEvent.runCommand("/tpdeny " + p.getName()));
         MessageUtil.sendMessage(tg, c1.append(c2));
     }
 

@@ -1,4 +1,4 @@
 package top.itsglobally.circlenetwork.circleSMP.managers;
 
-public class PlayerManager {
+public class PlayerManager extends Manager {
 }

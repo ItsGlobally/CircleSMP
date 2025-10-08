@@ -21,6 +21,10 @@ public class MessageUtil {
         player1.sendMessage(component);
         player2.sendMessage(component);
     }
+    public static void sendMessage(Player player1, Player player2, Component message) {
+        player1.sendMessage(message);
+        player2.sendMessage(message);
+    }
 
 
     public static void sendActionBar(Player player, String message) {
@@ -37,6 +41,9 @@ public class MessageUtil {
 
 
     public static String formatMessage(String message) {
-        return ChatColor.translateAlternateColorCodes('&', message);
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(message).toString();
+    }
+    public static Component formatMessageToComponent(String message) {
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(message);
     }
 }

@@ -164,7 +164,6 @@ public class DataManager extends Manager {
         public PlayerData get(Player player) {
             return get(player.getUniqueId());
         }
-
         public PlayerData get(UUID uuid) {
             if (data == null)
                 data = new LinkedHashMap<>();

@@ -20,6 +20,7 @@ import top.nontage.nontagelib.annotations.CommandInfo;
 import top.nontage.nontagelib.command.NontageCommand;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CommandInfo(name = "tpa")
 public class tpa implements NontageCommand, ICommand {
@@ -83,6 +84,12 @@ public class tpa implements NontageCommand, ICommand {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String label, String[] args) {
-        return NontageCommand.super.onTabComplete(sender, label, args);
+        if (args.length == 1) {
+            return Bukkit.getOnlinePlayers().stream()
+                    .map(Player::getName)
+                    .filter(name -> name.toLowerCase().startsWith(args[0].toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+        return List.of();
     }
 }

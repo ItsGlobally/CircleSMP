@@ -2,7 +2,9 @@ package top.itsglobally.circlenetwork.circleSMP.commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import top.itsglobally.circlenetwork.circleSMP.data.SMPPlayer;
 import top.itsglobally.circlenetwork.circleSMP.managers.DataManager;
+import top.itsglobally.circlenetwork.circleSMP.managers.PlayerManager;
 import top.itsglobally.circlenetwork.circleSMP.utils.ManagerRegistry;
 import top.itsglobally.circlenetwork.circleSMP.utils.MessageUtil;
 import top.nontage.nontagelib.annotations.CommandInfo;
@@ -23,22 +25,24 @@ public class delhome implements NontageCommand, ICommand {
 
         String name = args[0].toLowerCase();
 
-        DataManager dm = ManagerRegistry.get(DataManager.class);
-        DataManager.PlayerData pd = dm.getPlayerDatas().get(p);
+        SMPPlayer sp = ManagerRegistry.get(PlayerManager.class).getPlayer(p);
 
-        if (pd.getHome(name) == null) {
+        if (sp.getPlayerDatas().getHome(name) == null) {
             MessageUtil.sendMessage(p, "&7Home &e" + name + " not found!");
             return;
         }
 
-        pd.removeHome(name);
-        dm.getPlayerDatas().update(pd);
+        sp.getPlayerDatas().removeHome(name);
+        sp.updatePlayerDatas();
         MessageUtil.sendMessage(p, "&9Home " + name + " has been removed!");
     }
 
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String label, String[] args) {
-        return NontageCommand.super.onTabComplete(sender, label, args);
+        if (!(sender instanceof Player p)) return List.of();
+        DataManager dm = ManagerRegistry.get(DataManager.class);
+        DataManager.PlayerData pd = dm.getPlayerDatas().get(p);
+        return pd.getHomes().keySet().stream().toList();
     }
 }

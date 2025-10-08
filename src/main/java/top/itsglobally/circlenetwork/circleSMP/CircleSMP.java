@@ -24,6 +24,6 @@ public final class CircleSMP extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        ManagerRegistry.get(DataManager.class).reload();
+        ManagerRegistry.get(DataManager.class).getPlayerDatas().save();
     }
 }

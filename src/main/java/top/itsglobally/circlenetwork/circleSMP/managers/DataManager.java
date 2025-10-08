@@ -166,9 +166,9 @@ public class DataManager extends Manager {
         }
 
         public PlayerData get(UUID uuid) {
-            Map<String, Object> map = data.get(uuid);
             if (data == null)
                 data = new LinkedHashMap<>();
+            Map<String, Object> map = data.get(uuid);
             if (map == null) {
                 PlayerData pd = new PlayerData(uuid);
                 data.put(uuid, serializePlayerData(pd));
@@ -176,6 +176,13 @@ public class DataManager extends Manager {
                 return pd;
             }
             return deserializePlayerData(map);
+        }
+
+        public void update(PlayerData playerData) {
+            if (data == null)
+                data = new LinkedHashMap<>();
+            data.put(playerData.getUuid(), serializePlayerData(playerData));
+            save();
         }
     }
 }

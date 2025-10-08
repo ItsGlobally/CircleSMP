@@ -32,7 +32,7 @@ public class delhome implements NontageCommand, ICommand {
         }
 
         pd.removeHome(name);
-        dm.getPlayerDatas().save();
+        dm.getPlayerDatas().update(pd);
         MessageUtil.sendMessage(p, "&9Home " + name + " has been removed!");
     }
 

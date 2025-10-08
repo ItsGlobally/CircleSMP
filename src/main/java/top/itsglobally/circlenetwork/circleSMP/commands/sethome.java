@@ -29,6 +29,8 @@ public class sethome implements NontageCommand, ICommand {
             return;
         }
         pd.setHome(strings[0], p.getLocation());
+        dm.getPlayerDatas().update(pd);
+        MessageUtil.sendMessage(p, "&9Home " + strings[0] + " has been set!");
     }
 
     @Override

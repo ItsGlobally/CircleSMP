@@ -1,16 +1,16 @@
 package top.itsglobally.circlenetwork.circleSMP.commands;
 
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import top.itsglobally.circlenetwork.circleSMP.managers.DataManager;
 import top.itsglobally.circlenetwork.circleSMP.utils.ManagerRegistry;
 import top.itsglobally.circlenetwork.circleSMP.utils.MessageUtil;
+import top.nontage.nontagelib.annotations.CommandInfo;
 import top.nontage.nontagelib.command.NontageCommand;
 
-import java.util.ArrayList;
 import java.util.List;
 
+@CommandInfo(name = "delhome")
 public class delhome implements NontageCommand, ICommand {
     @Override
     public void execute(CommandSender sender, String label, String[] args) {

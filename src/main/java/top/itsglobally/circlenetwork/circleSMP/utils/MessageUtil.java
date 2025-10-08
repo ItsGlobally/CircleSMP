@@ -1,7 +1,6 @@
 package top.itsglobally.circlenetwork.circleSMP.utils;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -11,6 +10,7 @@ public class MessageUtil {
     public static void sendMessage(Player player, Component message) {
         player.sendMessage(message);
     }
+
     public static void sendMessage(Player player, String message) {
         Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
         player.sendMessage(component);

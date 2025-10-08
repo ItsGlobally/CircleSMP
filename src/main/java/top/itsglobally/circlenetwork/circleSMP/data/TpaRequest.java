@@ -8,8 +8,9 @@ import java.util.Objects;
 public class TpaRequest {
     private final Player sender;
     private final Player target;
-    private BukkitTask task;
-    private TpaType type;
+    private final BukkitTask task;
+    private final TpaType type;
+
     public TpaRequest(Player sender, Player target, BukkitTask task, TpaType type) {
         this.sender = sender;
         this.target = target;
@@ -32,6 +33,7 @@ public class TpaRequest {
     public TpaType getType() {
         return type;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

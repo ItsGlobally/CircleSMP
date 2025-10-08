@@ -1,14 +1,21 @@
 package top.itsglobally.circlenetwork.circleSMP.utils;
 
+import org.bukkit.Bukkit;
 import org.reflections.Reflections;
 import top.itsglobally.circlenetwork.circleSMP.managers.Manager;
 
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public final class ManagerRegistry {
 
     private static final Map<Class<? extends Manager>, Manager> MANAGERS = new HashMap<>();
+
+    private ManagerRegistry() {
+    }
 
     public static void init() {
         Reflections reflections = new Reflections("top.itsglobally.circlenetwork.circleSMP.managers");
@@ -21,9 +28,9 @@ public final class ManagerRegistry {
                 constructor.setAccessible(true);
                 Manager instance = constructor.newInstance();
                 MANAGERS.put(clazz, instance);
-                System.out.println("[CircleSMP] Loaded Manager: " + clazz.getSimpleName());
+                Bukkit.getLogger().info("[CircleSMP] Loaded Manager: " + clazz.getSimpleName());
             } catch (Exception e) {
-                System.err.println("[CircleSMP] Failed to load Manager: " + clazz.getName());
+                Bukkit.getLogger().warning("[CircleSMP] Failed to load Manager: " + clazz.getName());
                 e.printStackTrace();
             }
         }
@@ -37,7 +44,5 @@ public final class ManagerRegistry {
     public static Collection<Manager> getAll() {
         return MANAGERS.values();
     }
-
-    private ManagerRegistry() {}
 }
 

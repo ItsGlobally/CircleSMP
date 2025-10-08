@@ -1,9 +1,9 @@
 package top.itsglobally.circlenetwork.circleSMP.commands;
 
-import net.luckperms.api.messenger.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import top.itsglobally.circlenetwork.circleSMP.data.SMPPlayer;
 import top.itsglobally.circlenetwork.circleSMP.data.TpaRequest;
 import top.itsglobally.circlenetwork.circleSMP.data.TpaType;
 import top.itsglobally.circlenetwork.circleSMP.managers.PlayerManager;
@@ -13,9 +13,8 @@ import top.nontage.nontagelib.annotations.CommandInfo;
 import top.nontage.nontagelib.command.NontageCommand;
 
 import java.util.List;
-import java.util.Set;
 
-@CommandInfo(name="tpaccept")
+@CommandInfo(name = "tpaccept")
 public class tpaccept implements NontageCommand, ICommand {
     @Override
     public void execute(CommandSender commandSender, String s, String[] strings) {
@@ -23,6 +22,7 @@ public class tpaccept implements NontageCommand, ICommand {
 
         if (strings.length < 1) {
             MessageUtil.sendMessage(p, "&cUsage: /tpaccept player");
+            return;
         }
         String targetn = strings[0];
         Player tg = Bukkit.getPlayerExact(targetn);
@@ -31,20 +31,25 @@ public class tpaccept implements NontageCommand, ICommand {
             return;
         }
         PlayerManager m = ManagerRegistry.get(PlayerManager.class);
-        TpaRequest tr = m.getTpaRequest(tg, p);
+        SMPPlayer sp = m.getPlayer(tg);
+        if (sp == null) {
+            MessageUtil.sendMessage(p, "???");
+            return;
+        }
+        TpaRequest tr = sp.getTpaRequest(p);
 
         if (tr == null) {
             MessageUtil.sendMessage(p, "&7That player did not send a tpa request to you!");
             return;
         }
         if (tr.getType() == TpaType.TPA) {
-            m.removeTpaRequest(tg, tr);
-           tg.teleport(p.getLocation());
+            sp.removeTpaRequest(tr);
+            tg.teleport(p.getLocation());
             MessageUtil.sendMessage(p, "&9" + tg.getName() + " has teleported to you!");
             MessageUtil.sendMessage(tg, "&9You have teleported to " + p.getName() + "!");
             return;
         }
-        m.removeTpaRequest(tg, tr);
+        sp.removeTpaRequest(tr);
         p.teleport(tg.getLocation());
         MessageUtil.sendMessage(tg, "&9" + p.getName() + " has teleported to you!");
         MessageUtil.sendMessage(p, "&9You have teleported to " + tg.getName() + "!");

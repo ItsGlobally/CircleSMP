@@ -6,7 +6,10 @@ import org.bukkit.entity.Player;
 import top.nontage.nontagelib.config.BaseConfig;
 
 import java.io.File;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public class DataManager extends Manager {
 
@@ -27,6 +30,8 @@ public class DataManager extends Manager {
     public void reload() {
         mainConfig.reload();
         playerDatas.reload();
+        if (playerDatas.data == null)
+            playerDatas.data = new LinkedHashMap<>();
     }
 
     public MainConfig getMainConfig() {
@@ -43,17 +48,7 @@ public class DataManager extends Manager {
         config.reload();
         return config;
     }
-    public class MainConfig extends BaseConfig {
-        public int tpaTimeoutSecond = 60;
-        public int maxHomes;
-        public int getTpaTimeoutSecond() {
-            return tpaTimeoutSecond;
-        }
 
-        public int getMaxHomes() {
-            return maxHomes;
-        }
-    }
     private Map<String, Object> serializePlayerData(PlayerData data) {
         if (data == null) return null;
         Map<String, Object> map = new LinkedHashMap<>();
@@ -67,11 +62,32 @@ public class DataManager extends Manager {
         return map;
     }
 
-
     private PlayerData deserializePlayerData(Map<String, Object> map) {
         if (map == null) return null;
-        return new PlayerData((UUID) map.get("uuid"));
+        Object rawUuid = map.get("uuid");
+        UUID uuid;
+
+        if (rawUuid instanceof UUID) {
+            uuid = (UUID) rawUuid;
+        } else {
+            uuid = UUID.fromString(rawUuid.toString());
+        }
+
+        PlayerData pd = new PlayerData(uuid);
+
+        Object homesObj = map.get("homes");
+        if (homesObj instanceof Map<?, ?> homesMap) {
+            for (Map.Entry<?, ?> entry : homesMap.entrySet()) {
+                String name = entry.getKey().toString();
+                if (entry.getValue() instanceof Map<?, ?> locMap) {
+                    pd.setHome(name, deserializeLocation((Map<String, Object>) locMap));
+                }
+            }
+        }
+
+        return pd;
     }
+
     private Map<String, Object> serializeLocation(Location loc) {
         if (loc == null) return null;
         Map<String, Object> map = new LinkedHashMap<>();
@@ -96,27 +112,9 @@ public class DataManager extends Manager {
         );
     }
 
-    public class PlayerDatas extends BaseConfig {
-        public Map<UUID, Map<String, Object>> data = new LinkedHashMap<>();
-
-        public PlayerData get(Player player) {
-            return get(player.getUniqueId());
-        }
-
-        public PlayerData get(UUID uuid) {
-            Map<String, Object> map = data.get(uuid);
-            if (map == null) {
-                PlayerData pd = new PlayerData(uuid);
-                data.put(uuid, serializePlayerData(pd));
-                save();
-                return pd;
-            }
-            return deserializePlayerData(map);
-        }
-    }
     public static class PlayerData {
         private final UUID uuid;
-        private Map<String, Location> homes = new LinkedHashMap<>();
+        private final Map<String, Location> homes = new LinkedHashMap<>();
 
         public PlayerData(UUID uuid) {
             this.uuid = uuid;
@@ -144,6 +142,40 @@ public class DataManager extends Manager {
 
         public Set<String> listHomes() {
             return homes.keySet();
+        }
+    }
+
+    public class MainConfig extends BaseConfig {
+        public int tpaTimeoutSecond = 60;
+        public int maxHomes = 5;
+
+        public int getTpaTimeoutSecond() {
+            return tpaTimeoutSecond;
+        }
+
+        public int getMaxHomes() {
+            return maxHomes;
+        }
+    }
+
+    public class PlayerDatas extends BaseConfig {
+        public Map<UUID, Map<String, Object>> data = new LinkedHashMap<>();
+
+        public PlayerData get(Player player) {
+            return get(player.getUniqueId());
+        }
+
+        public PlayerData get(UUID uuid) {
+            Map<String, Object> map = data.get(uuid);
+            if (data == null)
+                data = new LinkedHashMap<>();
+            if (map == null) {
+                PlayerData pd = new PlayerData(uuid);
+                data.put(uuid, serializePlayerData(pd));
+                save();
+                return pd;
+            }
+            return deserializePlayerData(map);
         }
     }
 }

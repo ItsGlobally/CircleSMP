@@ -4,12 +4,12 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.apache.commons.codec.digest.MessageDigestAlgorithms;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import top.itsglobally.circlenetwork.circleSMP.data.SMPPlayer;
 import top.itsglobally.circlenetwork.circleSMP.data.TpaRequest;
 import top.itsglobally.circlenetwork.circleSMP.data.TpaType;
 import top.itsglobally.circlenetwork.circleSMP.managers.DataManager;
@@ -21,7 +21,7 @@ import top.nontage.nontagelib.command.NontageCommand;
 
 import java.util.List;
 
-@CommandInfo(name="tpa")
+@CommandInfo(name = "tpa")
 public class tpa implements NontageCommand, ICommand {
 
     @Override
@@ -30,6 +30,7 @@ public class tpa implements NontageCommand, ICommand {
 
         if (strings.length < 1) {
             MessageUtil.sendMessage(p, "&7Usage: /tpa player");
+            return;
         }
         String targetn = strings[0];
         Player tg = Bukkit.getPlayerExact(targetn);
@@ -38,7 +39,12 @@ public class tpa implements NontageCommand, ICommand {
             return;
         }
         PlayerManager m = ManagerRegistry.get(PlayerManager.class);
-        TpaRequest ctr = m.getTpaRequest(p, tg);
+        SMPPlayer sp = m.getPlayer(p);
+        if (sp == null) {
+            MessageUtil.sendMessage(p, "???");
+            return;
+        }
+        TpaRequest ctr = sp.getTpaRequest(tg);
         if (ctr != null) {
             Component c1 = Component.text("You've already sent a tpa request to that player!\n")
                     .color(NamedTextColor.GRAY);
@@ -55,12 +61,12 @@ public class tpa implements NontageCommand, ICommand {
             public void run() {
                 MessageUtil.sendMessage(p, "&7Tpa request to " + tg.getName() + " has expired.");
                 MessageUtil.sendMessage(tg, "&7Tpa request from " + p.getName() + " has expired.");
-                m.removeTpaRequest(p, m.getTpaRequest(p, tg));
+                sp.removeTpaRequest(sp.getTpaRequest(tg));
             }
         }.runTaskLater(plugin, 20L * ManagerRegistry.get(DataManager.class).getMainConfig().getTpaTimeoutSecond());
         TpaRequest tr = new TpaRequest(p, tg, bt, TpaType.TPA);
 
-        m.addTpaRequest(p, tr);
+        sp.addTpaRequest(tr);
 
         MessageUtil.sendMessage(p, "&9You've sent a tpa request to " + tg.getName() + "! They have " + ManagerRegistry.get(DataManager.class).getMainConfig().getTpaTimeoutSecond() + " seconds to accept!");
         MessageUtil.sendMessage(tg, "&9" + p.getName() + " has sent you a tpa request! You have " + ManagerRegistry.get(DataManager.class).getMainConfig().getTpaTimeoutSecond() + " seconds to accept!");

@@ -3,13 +3,11 @@ package top.itsglobally.circlenetwork.circleSMP.managers;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import top.nontage.nontagelib.annotations.YamlIgnore;
 import top.nontage.nontagelib.config.BaseConfig;
 
 import java.io.File;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class DataManager extends Manager {
 
@@ -32,6 +30,7 @@ public class DataManager extends Manager {
         playerDatas.reload();
         if (playerDatas.data == null)
             playerDatas.data = new LinkedHashMap<>();
+        playerDatas.loadCache();
     }
 
     public MainConfig getMainConfig() {
@@ -64,14 +63,11 @@ public class DataManager extends Manager {
 
     private PlayerData deserializePlayerData(Map<String, Object> map) {
         if (map == null) return null;
-        Object rawUuid = map.get("uuid");
-        UUID uuid;
 
-        if (rawUuid instanceof UUID) {
-            uuid = (UUID) rawUuid;
-        } else {
-            uuid = UUID.fromString(rawUuid.toString());
-        }
+        Object rawUuid = map.get("uuid");
+        UUID uuid = (rawUuid instanceof UUID)
+                ? (UUID) rawUuid
+                : UUID.fromString(String.valueOf(rawUuid));
 
         PlayerData pd = new PlayerData(uuid);
 
@@ -84,7 +80,6 @@ public class DataManager extends Manager {
                 }
             }
         }
-
         return pd;
     }
 
@@ -159,28 +154,47 @@ public class DataManager extends Manager {
     }
 
     public class PlayerDatas extends BaseConfig {
-        public Map<UUID, Map<String, Object>> data = new LinkedHashMap<>();
+        public Map<String, Map<String, Object>> data = new LinkedHashMap<>();
+        @YamlIgnore
+        private final Map<UUID, PlayerData> cache = new HashMap<>();
+
+        public void loadCache() {
+            cache.clear();
+            for (Map.Entry<String, Map<String, Object>> entry : data.entrySet()) {
+                UUID uuid = UUID.fromString(entry.getKey());
+                cache.put(uuid, deserializePlayerData(entry.getValue()));
+            }
+        }
 
         public PlayerData get(Player player) {
             return get(player.getUniqueId());
         }
+
         public PlayerData get(UUID uuid) {
-            if (data == null)
-                data = new LinkedHashMap<>();
-            Map<String, Object> map = data.get(uuid);
-            if (map == null) {
-                PlayerData pd = new PlayerData(uuid);
-                data.put(uuid, serializePlayerData(pd));
-                save();
-                return pd;
-            }
-            return deserializePlayerData(map);
+            if (cache.containsKey(uuid))
+                return cache.get(uuid);
+
+            Map<String, Object> map = data.get(uuid.toString());
+            PlayerData pd = (map == null)
+                    ? new PlayerData(uuid)
+                    : deserializePlayerData(map);
+
+            cache.put(uuid, pd);
+            data.put(uuid.toString(), serializePlayerData(pd));
+            save();
+            return pd;
         }
 
         public void update(PlayerData playerData) {
-            if (data == null)
-                data = new LinkedHashMap<>();
-            data.put(playerData.getUuid(), serializePlayerData(playerData));
+            cache.put(playerData.getUuid(), playerData);
+            data.put(playerData.getUuid().toString(), serializePlayerData(playerData));
+            save();
+        }
+
+        public void flush() {
+            for (PlayerData pd : cache.values()) {
+                data.put(pd.getUuid().toString(), serializePlayerData(pd));
+            }
             save();
         }
     }

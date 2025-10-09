@@ -24,10 +24,10 @@ public class home implements NontageCommand, ICommand {
             StringBuilder sb = new StringBuilder();
             sb.append("&3---------------------------------\n");
             sb.append("Your homes: \n");
-            for (String name : sp.getPlayerDatas().getHomes().keySet()) {
+            for (String name : sp.getPlayerDatas().listHomes()) {
                 sb.append("- ").append(name).append("\n");
             }
-            sb.append("&3---------------------------------\n");
+            sb.append("&3---------------------------------");
             MessageUtil.sendMessage(p, sb.toString());
             return;
         }

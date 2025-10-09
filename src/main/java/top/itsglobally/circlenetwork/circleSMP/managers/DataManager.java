@@ -3,6 +3,7 @@ package top.itsglobally.circlenetwork.circleSMP.managers;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import top.itsglobally.circlenetwork.circleSMP.data.Claim;
 import top.nontage.nontagelib.annotations.YamlIgnore;
 import top.nontage.nontagelib.config.BaseConfig;
 
@@ -14,6 +15,7 @@ public class DataManager extends Manager {
     private static File configDir;
     private static MainConfig mainConfig;
     private static PlayerDatas playerDatas;
+
     public DataManager() {
         configDir = plugin.getDataFolder();
         if (!configDir.exists()) configDir.mkdirs();
@@ -80,6 +82,44 @@ public class DataManager extends Manager {
             }
         }
         return pd;
+    }
+
+    private Map<String, Object> serializeClaim(Claim c) {
+        if (c == null) return null;
+        Map<String, Object> map = new LinkedHashMap<>();
+        List<String> colabs = c.getColabs().stream()
+                .map(UUID::toString)
+                .toList();
+        map.put("colabs", colabs); //set<uuid>
+        map.put("owner", c.getOwner());
+        List<Long> coveredChunks = new ArrayList<>(c.getCoveredChunks());
+        map.put("coveredChunks", coveredChunks); //set<long>
+        map.put("name", c.getName());
+        return map;
+    }
+
+    private Claim deserializeClaim(Map<String, Object> map) {
+        if (map == null) return null;
+
+        String name = (String) map.get("name");
+        UUID owner = UUID.fromString((String) map.get("owner"));
+        Claim claim = new Claim(name, owner);
+
+        List<String> colabList = (List<String>) map.get("colabs");
+        if (colabList != null) {
+            for (String s : colabList) {
+                claim.addColab(UUID.fromString(s));
+            }
+        }
+
+        List<Long> chunkList = (List<Long>) map.get("coveredChunks");
+        if (chunkList != null) {
+            for (Long key : chunkList) {
+                claim.addChunk(key);
+            }
+        }
+
+        return claim;
     }
 
     private Map<String, Object> serializeLocation(Location loc) {
@@ -151,9 +191,47 @@ public class DataManager extends Manager {
             return maxHomes;
         }
     }
-    public static class Claims extends BaseConfig {
 
+    public class Claims extends BaseConfig {
+
+        private final Set<Map<String, Object>> rawClaims = new LinkedHashSet<>();
+
+        @YamlIgnore
+        private final Map<UUID, Claim> cache = new HashMap<>();
+
+        public void loadClaims() {
+            cache.clear();
+            for (Map<String, Object> map : rawClaims) {
+                Claim claim = deserializeClaim(map);
+                if (claim != null) {
+                    cache.put(claim.getOwner(), claim);
+                }
+            }
+        }
+
+        public Set<Claim> getClaims() {
+            return new HashSet<>(cache.values());
+        }
+
+        public Claim getClaim(UUID owner) {
+            return cache.get(owner);
+        }
+
+        public void addClaim(Claim claim) {
+            cache.put(claim.getOwner(), claim);
+            rawClaims.add(serializeClaim(claim));
+            save();
+        }
+
+        public void removeClaim(UUID owner) {
+            Claim claim = cache.remove(owner);
+            if (claim != null) {
+                rawClaims.removeIf(m -> ((String) m.get("owner")).equals(owner.toString()));
+                save();
+            }
+        }
     }
+
     public enum ClaimPerms {
         PLACE, BREAK, INTERACT, MOVEINTO
     }

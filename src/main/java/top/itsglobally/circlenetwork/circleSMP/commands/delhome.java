@@ -34,7 +34,7 @@ public class delhome implements NontageCommand, ICommand {
 
         sp.getPlayerDatas().removeHome(name);
         sp.updatePlayerDatas();
-        MessageUtil.sendMessage(p, "&9Home " + name + " has been removed!");
+        MessageUtil.sendMessage(p, "&3Home " + name + " has been removed!");
     }
 
 

@@ -15,12 +15,12 @@ public class list implements NontageCommand, ICommand {
     public void execute(CommandSender commandSender, String s, String[] strings) {
         PlayerManager m = ManagerRegistry.get(PlayerManager.class);
         StringBuilder sb = new StringBuilder();
-        sb.append("---------------------------------\n");
+        sb.append("&3---------------------------------\n");
         sb.append("There are ").append(m.getPlayers().size()).append(" players\n");
         for (SMPPlayer sp : m.getPlayers().values()) {
-            sb.append("- ").append(sp.getName()).append("\n");
+            sb.append("&3- ").append(sp.getName()).append("\n");
         }
-        sb.append("---------------------------------");
+        sb.append("&3---------------------------------");
         commandSender.sendMessage(sb.toString());
     }
 

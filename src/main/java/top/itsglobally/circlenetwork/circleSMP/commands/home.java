@@ -18,24 +18,30 @@ public class home implements NontageCommand, ICommand {
     @Override
     public void execute(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player p)) return;
+        SMPPlayer sp = ManagerRegistry.get(PlayerManager.class).getPlayer(p);
 
         if (args.length < 1) {
-            MessageUtil.sendMessage(p, "&7");
+            StringBuilder sb = new StringBuilder();
+            sb.append("&3---------------------------------\n");
+            sb.append("Your homes: \n");
+            for (String name : sp.getPlayerDatas().getHomes().keySet()) {
+                sb.append("- ").append(name).append("\n");
+            }
+            sb.append("&3---------------------------------\n");
+            MessageUtil.sendMessage(p, sb.toString());
             return;
         }
 
         String name = args[0].toLowerCase();
 
-        SMPPlayer sp = ManagerRegistry.get(PlayerManager.class).getPlayer(p);
-
         Location loc = sp.getPlayerDatas().getHome(name);
         if (loc == null) {
-            MessageUtil.sendMessage(p, "&7home &e" + name + " does not exist!");
+            MessageUtil.sendMessage(p, "&7home " + name + " does not exist!");
             return;
         }
 
         p.teleport(loc);
-        MessageUtil.sendMessage(p, "&9Teleported to home " + name + "!");
+        MessageUtil.sendMessage(p, "&3Teleported to home " + name + "!");
     }
 
     @Override

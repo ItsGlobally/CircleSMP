@@ -46,14 +46,14 @@ public class tpaccept implements NontageCommand, ICommand {
         if (tr.getType() == TpaType.TPA) {
             sp.removeTpaRequest(tr);
             tg.teleport(p.getLocation());
-            MessageUtil.sendMessage(p, "&9" + tg.getName() + " has teleported to you!");
-            MessageUtil.sendMessage(tg, "&9You have teleported to " + p.getName() + "!");
+            MessageUtil.sendMessage(p, "&3" + tg.getName() + " has teleported to you!");
+            MessageUtil.sendMessage(tg, "&3You have teleported to " + p.getName() + "!");
             return;
         }
         sp.removeTpaRequest(tr);
         p.teleport(tg.getLocation());
-        MessageUtil.sendMessage(tg, "&9" + p.getName() + " has teleported to you!");
-        MessageUtil.sendMessage(p, "&9You have teleported to " + tg.getName() + "!");
+        MessageUtil.sendMessage(tg, "&3" + p.getName() + " has teleported to you!");
+        MessageUtil.sendMessage(p, "&3You have teleported to " + tg.getName() + "!");
 
     }
 

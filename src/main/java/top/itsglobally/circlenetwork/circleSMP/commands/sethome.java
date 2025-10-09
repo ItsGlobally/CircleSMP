@@ -25,14 +25,13 @@ public class sethome implements NontageCommand, ICommand {
         }
         DataManager dm = ManagerRegistry.get(DataManager.class);
         SMPPlayer sp = ManagerRegistry.get(PlayerManager.class).getPlayer(p);
-        List<Location> allhomes = new ArrayList<>(sp.getPlayerDatas().getHomes().values());
-        if (allhomes.size() >= dm.getMainConfig().getMaxHomes()) {
+        if (sp.getPlayerDatas().getHomes().size() >= dm.getMainConfig().getMaxHomes()) {
             MessageUtil.sendMessage(p, "&7You've reached the max home amount(" + dm.getMainConfig().getMaxHomes() + "x homes)!");
             return;
         }
         sp.getPlayerDatas().setHome(strings[0], p.getLocation());
         sp.updatePlayerDatas();
-        MessageUtil.sendMessage(p, "&9Home " + strings[0] + " has been set!");
+        MessageUtil.sendMessage(p, "&3Home " + strings[0] + " has been set!");
     }
 
     @Override

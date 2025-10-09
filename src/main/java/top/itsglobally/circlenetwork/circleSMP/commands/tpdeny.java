@@ -43,7 +43,7 @@ public class tpdeny implements NontageCommand, ICommand {
         }
         sp.removeTpaRequest(tr);
         MessageUtil.sendMessage(tg, "&7" + p.getName() + " has denied your request!");
-        MessageUtil.sendMessage(p, "&9You have denied " + tg.getName() + "'s request!");
+        MessageUtil.sendMessage(p, "&3You have denied " + tg.getName() + "'s request!");
 
     }
 

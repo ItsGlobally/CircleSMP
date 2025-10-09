@@ -50,7 +50,7 @@ public class tphere implements NontageCommand, ICommand {
             Component c1 = Component.text("You've already sent a tphere request to that player!\n")
                     .color(NamedTextColor.GRAY);
             Component c2 = Component.text("Sent the wrong type of tpa? Click to cancel the previous request!")
-                    .color(NamedTextColor.BLUE)
+                    .color(NamedTextColor.DARK_AQUA)
                     .hoverEvent(HoverEvent.showText(Component.text("Click to cancel the previous request!")))
                     .clickEvent(ClickEvent.runCommand("/tpcancel " + tg.getName()));
 
@@ -69,14 +69,14 @@ public class tphere implements NontageCommand, ICommand {
 
         sp.addTpaRequest(tr);
 
-        MessageUtil.sendMessage(p, "&9You've sent a tphere request to " + tg.getName() + "! They have" + ManagerRegistry.get(DataManager.class).getMainConfig().getTpaTimeoutSecond() + " seconds to accept!");
-        MessageUtil.sendMessage(tg, "&9" + p.getName() + " has sent you a tphere request! You have" + ManagerRegistry.get(DataManager.class).getMainConfig().getTpaTimeoutSecond() + " seconds to accept!");
+        MessageUtil.sendMessage(p, "&3You've sent a tphere request to " + tg.getName() + "! They have" + ManagerRegistry.get(DataManager.class).getMainConfig().getTpaTimeoutSecond() + " seconds to accept!");
+        MessageUtil.sendMessage(tg, "&3" + p.getName() + " has sent you a tphere request! You have" + ManagerRegistry.get(DataManager.class).getMainConfig().getTpaTimeoutSecond() + " seconds to accept!");
         Component c1 = Component.text("Click to accept!\n")
-                .color(NamedTextColor.BLUE)
-                .hoverEvent(HoverEvent.showText(Component.text("Click to accept!").color(NamedTextColor.BLUE)))
+                .color(NamedTextColor.DARK_AQUA)
+                .hoverEvent(HoverEvent.showText(Component.text("Click to accept!").color(NamedTextColor.DARK_AQUA)))
                 .clickEvent(ClickEvent.runCommand("/tpaccept " + tg.getName()));
         Component c2 = Component.text("Click to deny!")
-                .color(NamedTextColor.BLUE)
+                .color(NamedTextColor.DARK_AQUA)
                 .hoverEvent(HoverEvent.showText(Component.text("Click to deny!").color(NamedTextColor.GRAY)))
                 .clickEvent(ClickEvent.runCommand("/tpdeny " + tg.getName()));
         MessageUtil.sendMessage(tg, c1.append(c2));

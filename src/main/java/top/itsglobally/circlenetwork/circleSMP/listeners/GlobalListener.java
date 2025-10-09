@@ -9,7 +9,7 @@ import top.itsglobally.circlenetwork.circleSMP.utils.ManagerRegistry;
 import top.nontage.nontagelib.annotations.AutoListener;
 
 @AutoListener
-public class GlobalListener implements Listener {
+public class GlobalListener implements IListener, Listener {
     @EventHandler
     public void join(PlayerJoinEvent e) {
         ManagerRegistry.get(PlayerManager.class).addPlayer(e.getPlayer());

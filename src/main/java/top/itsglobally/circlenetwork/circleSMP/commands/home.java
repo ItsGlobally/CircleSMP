@@ -23,7 +23,7 @@ public class home implements NontageCommand, ICommand {
         if (args.length < 1) {
             StringBuilder sb = new StringBuilder();
             sb.append("&3---------------------------------\n");
-            sb.append("Your homes: \n");
+            sb.append("&rYour homes: \n");
             for (String name : sp.getPlayerDatas().listHomes()) {
                 sb.append("- ").append(name).append("\n");
             }

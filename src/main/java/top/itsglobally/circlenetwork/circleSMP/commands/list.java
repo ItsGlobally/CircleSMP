@@ -16,7 +16,7 @@ public class list implements NontageCommand, ICommand {
         PlayerManager m = ManagerRegistry.get(PlayerManager.class);
         StringBuilder sb = new StringBuilder();
         sb.append("&3---------------------------------\n");
-        sb.append("There are ").append(m.getPlayers().size()).append(" players\n");
+        sb.append("&rThere are ").append(m.getPlayers().size()).append(" players\n");
         for (SMPPlayer sp : m.getPlayers().values()) {
             sb.append("&3- ").append(sp.getName()).append("\n");
         }

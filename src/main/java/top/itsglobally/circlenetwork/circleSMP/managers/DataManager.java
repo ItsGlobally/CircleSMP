@@ -14,7 +14,6 @@ public class DataManager extends Manager {
     private static File configDir;
     private static MainConfig mainConfig;
     private static PlayerDatas playerDatas;
-
     public DataManager() {
         configDir = plugin.getDataFolder();
         if (!configDir.exists()) configDir.mkdirs();
@@ -140,7 +139,7 @@ public class DataManager extends Manager {
         }
     }
 
-    public class MainConfig extends BaseConfig {
+    public static class MainConfig extends BaseConfig {
         public int tpaTimeoutSecond = 60;
         public int maxHomes = 5;
 
@@ -151,6 +150,12 @@ public class DataManager extends Manager {
         public int getMaxHomes() {
             return maxHomes;
         }
+    }
+    public static class Claims extends BaseConfig {
+
+    }
+    public enum ClaimPerms {
+        PLACE, BREAK, INTERACT, MOVEINTO
     }
 
     public class PlayerDatas extends BaseConfig {

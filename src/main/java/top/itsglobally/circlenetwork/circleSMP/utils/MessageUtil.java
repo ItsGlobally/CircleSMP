@@ -31,6 +31,11 @@ public class MessageUtil {
         Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
         player.sendActionBar(component);
     }
+    public static void sendDebugActionBar(Player player, String message) {
+        if (!player.hasPermission("circlesmp.admin")) return;
+        Component component = LegacyComponentSerializer.legacyAmpersand().deserialize("&3DEBUG! " + message);
+        player.sendActionBar(component);
+    }
 
     public static void sendTitle(Player player, String title, String subtitle) {
         player.sendTitle(

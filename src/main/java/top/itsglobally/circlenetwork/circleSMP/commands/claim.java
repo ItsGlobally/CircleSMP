@@ -10,6 +10,7 @@ import top.itsglobally.circlenetwork.circleSMP.utils.MessageUtil;
 import top.nontage.nontagelib.command.NontageCommand;
 
 import java.util.List;
+import java.util.UUID;
 
 public class claim implements NontageCommand, ICommand {
     @Override
@@ -20,15 +21,18 @@ public class claim implements NontageCommand, ICommand {
         ClaimManager cm = ManagerRegistry.get(ClaimManager.class);
         switch (strings[0]) {
             case "create": {
-                if (cm.getClaim(p.getUniqueId()) != null) {
-                    MessageUtil.sendMessage(p, "&7You already have a claim!");
+                boolean hasSameName = cm.getClaims(p.getUniqueId()).stream()
+                        .anyMatch(c -> c.getName().equalsIgnoreCase(arg));
+
+                if (hasSameName) {
+                    MessageUtil.sendMessage(p, "&7You already have a claim with that name!");
                     return;
                 }
                 if (Tmp.cl1.get(p.getUniqueId()) == null || Tmp.cl2.get(p.getUniqueId()) == null) {
                     MessageUtil.sendMessage(p, "&7Set pos 1 and pos 2 first!");
                     return;
                 }
-                Claim newClaim = new Claim(arg, p.getUniqueId());
+                Claim newClaim = new Claim(arg, p.getUniqueId(), UUID.randomUUID());
                 newClaim.addRegion(Tmp.cl1.get(p.getUniqueId()), Tmp.cl2.get(p.getUniqueId()));
                 cm.registerClaim(newClaim);
             }
@@ -43,9 +47,24 @@ public class claim implements NontageCommand, ICommand {
             case "list": {
                 StringBuilder sb = new StringBuilder();
                 sb.append("&3---------------------------------\n");
-                sb.append("&rYour claim: ").append(cm.getClaim(p.getUniqueId()) == null ? "&7Nothing here.&r" : cm.getClaim(p.getUniqueId()).getName()).append("\n");
+                sb.append("&rYour claim:\n");
+                for (Claim c : cm.getClaims(p.getUniqueId())) {
+                    sb.append("&r").append(c.getName()).append("\n");
+                }
+                sb.append("\n");
                 sb.append("&3---------------------------------");
                 MessageUtil.sendMessage(p, sb.toString());
+            }
+            case "remove": {
+                Claim c = cm.getClaims(p.getUniqueId()).stream()
+                        .filter(claim -> claim.getName().equals(arg))
+                        .findFirst()
+                        .orElse(null);
+                if (c == null) {
+                    MessageUtil.sendMessage(p, "&7That claim does not exist!");
+                    return;
+                }
+                cm.unregisterClaim(c);
             }
         }
     }

@@ -24,7 +24,8 @@ public class PlayerManager extends Manager {
 
     public PlayerManager() {
         this.players = new HashMap<>();
-        pds = ConfigRegister.register(new PlayerDatas(), "playerdatas");
+        pds = ConfigRegister.register(new PlayerDatas(), "playerdata");
+        pds.reload();
     }
 
     public PlayerDatas getPlayerDatas() {

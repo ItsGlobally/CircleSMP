@@ -7,6 +7,7 @@ public class ConfigManager extends Manager{
     private final MainConfig mainConfig;
     public ConfigManager() {
         mainConfig = ConfigRegister.register(new MainConfig(), "config");
+        mainConfig.reload();
     }
 
     public MainConfig getMainConfig() {

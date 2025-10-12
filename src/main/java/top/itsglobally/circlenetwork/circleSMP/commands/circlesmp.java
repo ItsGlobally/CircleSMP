@@ -19,12 +19,14 @@ public class circlesmp implements NontageCommand, ICommand {
             case "reload": {
                 ManagerRegistry.get(ConfigManager.class).getMainConfig().reload();
                 ManagerRegistry.get(ClaimManager.class).getClaims().reload();
+                ManagerRegistry.get(ClaimManager.class).getClaims().loadClaims();
                 ManagerRegistry.get(PlayerManager.class).getPlayerDatas().reload();
+                ManagerRegistry.get(PlayerManager.class).getPlayerDatas().loadCache();
             }
             case "saveall": {
                 ManagerRegistry.get(ConfigManager.class).getMainConfig().save();
-                ManagerRegistry.get(ClaimManager.class).getClaims().save();
-                ManagerRegistry.get(PlayerManager.class).getPlayerDatas().save();
+                ManagerRegistry.get(ClaimManager.class).getClaims().flush();
+                ManagerRegistry.get(PlayerManager.class).getPlayerDatas().flush();
             }
         }
     }

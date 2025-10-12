@@ -1,6 +1,8 @@
 package top.itsglobally.circlenetwork.circleSMP;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import top.itsglobally.circlenetwork.circleSMP.managers.ClaimManager;
+import top.itsglobally.circlenetwork.circleSMP.managers.ConfigManager;
 import top.itsglobally.circlenetwork.circleSMP.managers.PlayerManager;
 import top.itsglobally.circlenetwork.circleSMP.utils.ManagerRegistry;
 import top.nontage.nontagelib.command.NontageCommandLoader;
@@ -24,6 +26,8 @@ public final class CircleSMP extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        ManagerRegistry.get(PlayerManager.class).getPlayerDatas().save();
+        ManagerRegistry.get(ConfigManager.class).getMainConfig().save();
+        ManagerRegistry.get(ClaimManager.class).getClaims().flush();
+        ManagerRegistry.get(PlayerManager.class).getPlayerDatas().flush();
     }
 }

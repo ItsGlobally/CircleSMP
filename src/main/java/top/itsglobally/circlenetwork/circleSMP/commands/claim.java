@@ -7,20 +7,22 @@ import top.itsglobally.circlenetwork.circleSMP.data.Tmp;
 import top.itsglobally.circlenetwork.circleSMP.managers.ClaimManager;
 import top.itsglobally.circlenetwork.circleSMP.utils.ManagerRegistry;
 import top.itsglobally.circlenetwork.circleSMP.utils.MessageUtil;
+import top.nontage.nontagelib.annotations.CommandInfo;
 import top.nontage.nontagelib.command.NontageCommand;
 
 import java.util.List;
 import java.util.UUID;
 
+@CommandInfo(name="claim")
 public class claim implements NontageCommand, ICommand {
     @Override
     public void execute(CommandSender commandSender, String s, String[] strings) {
         if (!(commandSender instanceof Player p)) return;
-        if (strings.length < 2) return;
-        String arg = strings[1];
+        if (strings.length < 1) return;
         ClaimManager cm = ManagerRegistry.get(ClaimManager.class);
         switch (strings[0]) {
             case "create": {
+                String arg = strings[1];
                 boolean hasSameName = cm.getClaims(p.getUniqueId()).stream()
                         .anyMatch(c -> c.getName().equalsIgnoreCase(arg));
 
@@ -35,14 +37,17 @@ public class claim implements NontageCommand, ICommand {
                 Claim newClaim = new Claim(arg, p.getUniqueId(), UUID.randomUUID());
                 newClaim.addRegion(Tmp.cl1.get(p.getUniqueId()), Tmp.cl2.get(p.getUniqueId()));
                 cm.registerClaim(newClaim);
+                break;
             }
             case "pos1": {
                 Tmp.cl1.put(p.getUniqueId(), p.getLocation());
                 MessageUtil.sendMessage(p, "&3Set pos 1!");
+                break;
             }
             case "pos2": {
                 Tmp.cl2.put(p.getUniqueId(), p.getLocation());
                 MessageUtil.sendMessage(p, "&3Set pos 2!");
+                break;
             }
             case "list": {
                 StringBuilder sb = new StringBuilder();
@@ -54,8 +59,10 @@ public class claim implements NontageCommand, ICommand {
                 sb.append("\n");
                 sb.append("&3---------------------------------");
                 MessageUtil.sendMessage(p, sb.toString());
+                break;
             }
             case "remove": {
+                String arg = strings[1];
                 Claim c = cm.getClaims(p.getUniqueId()).stream()
                         .filter(claim -> claim.getName().equals(arg))
                         .findFirst()
@@ -65,6 +72,7 @@ public class claim implements NontageCommand, ICommand {
                     return;
                 }
                 cm.unregisterClaim(c);
+                break;
             }
         }
     }

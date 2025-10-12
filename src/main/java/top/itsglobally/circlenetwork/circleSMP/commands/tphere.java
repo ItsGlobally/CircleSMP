@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
 import top.itsglobally.circlenetwork.circleSMP.data.SMPPlayer;
 import top.itsglobally.circlenetwork.circleSMP.data.TpaRequest;
 import top.itsglobally.circlenetwork.circleSMP.data.TpaType;
-import top.itsglobally.circlenetwork.circleSMP.managers.DataManager;
+import top.itsglobally.circlenetwork.circleSMP.managers.ConfigManager;
 import top.itsglobally.circlenetwork.circleSMP.managers.PlayerManager;
 import top.itsglobally.circlenetwork.circleSMP.utils.ManagerRegistry;
 import top.itsglobally.circlenetwork.circleSMP.utils.MessageUtil;
@@ -64,13 +64,13 @@ public class tphere implements NontageCommand, ICommand {
                 MessageUtil.sendMessage(tg, "&7Tphere request from " + p.getName() + " has expired.");
                 sp.removeTpaRequest(sp.getTpaRequest(tg));
             }
-        }.runTaskLater(plugin, 20L * ManagerRegistry.get(DataManager.class).getMainConfig().getTpaTimeoutSecond());
+        }.runTaskLater(plugin, 20L * ManagerRegistry.get(ConfigManager.class).getMainConfig().getTpaTimeoutSecond());
         TpaRequest tr = new TpaRequest(p, tg, bt, TpaType.TPHERE);
 
         sp.addTpaRequest(tr);
 
-        MessageUtil.sendMessage(p, "&3You've sent a tphere request to " + tg.getName() + "! They have" + ManagerRegistry.get(DataManager.class).getMainConfig().getTpaTimeoutSecond() + " seconds to accept!");
-        MessageUtil.sendMessage(tg, "&3" + p.getName() + " has sent you a tphere request! You have" + ManagerRegistry.get(DataManager.class).getMainConfig().getTpaTimeoutSecond() + " seconds to accept!");
+        MessageUtil.sendMessage(p, "&3You've sent a tphere request to " + tg.getName() + "! They have" + ManagerRegistry.get(ConfigManager.class).getMainConfig().getTpaTimeoutSecond() + " seconds to accept!");
+        MessageUtil.sendMessage(tg, "&3" + p.getName() + " has sent you a tphere request! You have" + ManagerRegistry.get(ConfigManager.class).getMainConfig().getTpaTimeoutSecond() + " seconds to accept!");
         Component c1 = Component.text("Click to accept!\n")
                 .color(NamedTextColor.DARK_AQUA)
                 .hoverEvent(HoverEvent.showText(Component.text("Click to accept!").color(NamedTextColor.DARK_AQUA)))

@@ -2,7 +2,6 @@ package top.itsglobally.circlenetwork.circleSMP.data;
 
 import org.bukkit.Location;
 import top.itsglobally.circlenetwork.circleSMP.managers.ClaimManager;
-import top.itsglobally.circlenetwork.circleSMP.managers.DataManager;
 
 import java.util.*;
 
@@ -11,7 +10,7 @@ public class Claim {
     private final String name;
     private final Set<Long> coveredChunks;
     private final UUID owner;
-    private final Map<UUID, Set<DataManager.ClaimPerms>> colabs;
+    private final Map<UUID, Set<ClaimManager.ClaimPerms>> colabs;
     private final UUID id;
     public Claim(String name, UUID u, UUID id) {
         this.name = name;
@@ -31,26 +30,26 @@ public class Claim {
         return owner;
     }
 
-    public Map<UUID, Set<DataManager.ClaimPerms>> getColabs() {
+    public Map<UUID, Set<ClaimManager.ClaimPerms>> getColabs() {
         return colabs;
     }
     public boolean isInColab(UUID u) {
         return colabs.get(u) != null;
     }
-    public void addColab(UUID u, DataManager.ClaimPerms c) {
-        Set<DataManager.ClaimPerms> cs = new HashSet<>();
+    public void addColab(UUID u, ClaimManager.ClaimPerms c) {
+        Set<ClaimManager.ClaimPerms> cs = new HashSet<>();
         cs.add(c);
         colabs.put(u, cs);
     }
-    public void addColab(UUID u, Set<DataManager.ClaimPerms> cs) {
+    public void addColab(UUID u, Set<ClaimManager.ClaimPerms> cs) {
         colabs.put(u, cs);
     }
     public void addColab(UUID u) {
-        Set<DataManager.ClaimPerms> cs = new HashSet<>();
-        cs.add(DataManager.ClaimPerms.MOVEINTO);
-        cs.add(DataManager.ClaimPerms.PLACE);
-        cs.add(DataManager.ClaimPerms.BREAK);
-        cs.add(DataManager.ClaimPerms.INTERACT);
+        Set<ClaimManager.ClaimPerms> cs = new HashSet<>();
+        cs.add(ClaimManager.ClaimPerms.MOVEINTO);
+        cs.add(ClaimManager.ClaimPerms.PLACE);
+        cs.add(ClaimManager.ClaimPerms.BREAK);
+        cs.add(ClaimManager.ClaimPerms.INTERACT);
         colabs.put(u, cs);
     }
     public void addRegion(Location l1, Location l2) {

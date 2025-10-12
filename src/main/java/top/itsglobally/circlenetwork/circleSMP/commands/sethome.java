@@ -1,17 +1,16 @@
 package top.itsglobally.circlenetwork.circleSMP.commands;
 
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import top.itsglobally.circlenetwork.circleSMP.data.SMPPlayer;
-import top.itsglobally.circlenetwork.circleSMP.managers.DataManager;
+import top.itsglobally.circlenetwork.circleSMP.managers.ConfigManager;
 import top.itsglobally.circlenetwork.circleSMP.managers.PlayerManager;
 import top.itsglobally.circlenetwork.circleSMP.utils.ManagerRegistry;
 import top.itsglobally.circlenetwork.circleSMP.utils.MessageUtil;
 import top.nontage.nontagelib.annotations.CommandInfo;
 import top.nontage.nontagelib.command.NontageCommand;
 
-import java.util.ArrayList;
+import java.io.ObjectInputFilter;
 import java.util.List;
 
 @CommandInfo(name = "sethome")
@@ -23,7 +22,7 @@ public class sethome implements NontageCommand, ICommand {
             MessageUtil.sendMessage(p, "&7Usage: /sethome name");
             return;
         }
-        DataManager dm = ManagerRegistry.get(DataManager.class);
+        ConfigManager dm = ManagerRegistry.get(ConfigManager.class);
         SMPPlayer sp = ManagerRegistry.get(PlayerManager.class).getPlayer(p);
         if (sp.getPlayerDatas().getHomes().size() >= dm.getMainConfig().getMaxHomes()) {
             MessageUtil.sendMessage(p, "&7You've reached the max home amount(" + dm.getMainConfig().getMaxHomes() + "x homes)!");

@@ -4,7 +4,6 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import top.itsglobally.circlenetwork.circleSMP.data.SMPPlayer;
-import top.itsglobally.circlenetwork.circleSMP.managers.DataManager;
 import top.itsglobally.circlenetwork.circleSMP.managers.PlayerManager;
 import top.itsglobally.circlenetwork.circleSMP.utils.ManagerRegistry;
 import top.itsglobally.circlenetwork.circleSMP.utils.MessageUtil;
@@ -47,8 +46,8 @@ public class home implements NontageCommand, ICommand {
     @Override
     public List<String> onTabComplete(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player p)) return List.of();
-        DataManager dm = ManagerRegistry.get(DataManager.class);
-        DataManager.PlayerData pd = dm.getPlayerDatas().get(p);
+        PlayerManager dm = ManagerRegistry.get(PlayerManager.class);
+        PlayerManager.PlayerData pd = dm.getPlayerDatas().get(p);
         return pd.getHomes().keySet().stream().toList();
     }
 }

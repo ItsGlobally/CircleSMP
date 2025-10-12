@@ -1,8 +1,7 @@
 package top.itsglobally.circlenetwork.circleSMP.data;
 
 import org.bukkit.entity.Player;
-import top.itsglobally.circlenetwork.circleSMP.managers.DataManager;
-import top.itsglobally.circlenetwork.circleSMP.managers.Manager;
+import top.itsglobally.circlenetwork.circleSMP.managers.PlayerManager;
 import top.itsglobally.circlenetwork.circleSMP.utils.ManagerRegistry;
 
 import java.util.HashSet;
@@ -14,14 +13,14 @@ public class SMPPlayer {
     private final UUID uuid;
     private final Player player;
     private final Set<TpaRequest> tpaRequests;
-    private DataManager.PlayerData pds;
+    private PlayerManager.PlayerData pds;
 
     public SMPPlayer(Player p) {
         this.name = p.getName();
         this.uuid = p.getUniqueId();
         this.player = p;
         tpaRequests = new HashSet<>();
-        pds = ManagerRegistry.get(DataManager.class).getPlayerDatas().get(uuid);
+        pds = ManagerRegistry.get(PlayerManager.class).getPlayerDatas().get(uuid);
     }
 
     public UUID getUuid() {
@@ -56,10 +55,10 @@ public class SMPPlayer {
                 .orElse(null);
     }
 
-    public DataManager.PlayerData getPlayerDatas() {
+    public PlayerManager.PlayerData getPlayerDatas() {
         return pds;
     }
     public void updatePlayerDatas() {
-        ManagerRegistry.get(DataManager.class).getPlayerDatas().update(pds);
+        ManagerRegistry.get(PlayerManager.class).getPlayerDatas().update(pds);
     }
 }

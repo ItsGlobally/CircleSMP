@@ -1,7 +1,9 @@
 package top.itsglobally.circlenetwork.circleSMP.commands;
 
 import org.bukkit.command.CommandSender;
-import top.itsglobally.circlenetwork.circleSMP.managers.DataManager;
+import top.itsglobally.circlenetwork.circleSMP.managers.ClaimManager;
+import top.itsglobally.circlenetwork.circleSMP.managers.ConfigManager;
+import top.itsglobally.circlenetwork.circleSMP.managers.PlayerManager;
 import top.itsglobally.circlenetwork.circleSMP.utils.ManagerRegistry;
 import top.nontage.nontagelib.annotations.CommandInfo;
 import top.nontage.nontagelib.command.NontageCommand;
@@ -15,10 +17,14 @@ public class circlesmp implements NontageCommand, ICommand {
         if (strings.length < 1) return;
         switch (strings[0]) {
             case "reload": {
-                ManagerRegistry.get(DataManager.class).reload();
+                ManagerRegistry.get(ConfigManager.class).getMainConfig().reload();
+                ManagerRegistry.get(ClaimManager.class).getClaims().reload();
+                ManagerRegistry.get(PlayerManager.class).getPlayerDatas().reload();
             }
             case "saveall": {
-                ManagerRegistry.get(DataManager.class).getPlayerDatas().save();
+                ManagerRegistry.get(ConfigManager.class).getMainConfig().save();
+                ManagerRegistry.get(ClaimManager.class).getClaims().save();
+                ManagerRegistry.get(PlayerManager.class).getPlayerDatas().save();
             }
         }
     }
